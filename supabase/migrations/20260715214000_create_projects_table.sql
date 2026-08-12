@@ -1,27 +1,29 @@
 CREATE TABLE IF NOT EXISTS public.projects (
-    id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    title text NOT NULL,
-    category text,
-    description text,
-    tools text[] DEFAULT '{}'::text[],
-    image text,
-    link text,
-    created_at timestamp with time zone DEFAULT now()
+id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+title text NOT NULL,
+category text,
+description text,
+tools text[] DEFAULT '{}'::text[],
+image text,
+link text,
+created_at timestamp with time zone DEFAULT now()
 );
 
 -- Enable Row Level Security (RLS)
 ALTER TABLE public.projects ENABLE ROW LEVEL SECURITY;
 
--- Create policy for public read access (Anyone can view projects)
+-- Create policy for public read access
 DROP POLICY IF EXISTS "Allow public read access" ON public.projects;
+
 CREATE POLICY "Allow public read access" ON public.projects
-    FOR SELECT TO public USING (true);
+FOR SELECT TO public USING (true);
 
 -- Clean existing data to avoid duplicates
 TRUNCATE public.projects;
 
 -- Insert projects
-INSERT INTO public.projects (title, category, description, tools, image, link)
+INSERT INTO public.projects
+(title, category, description, tools, image, link)
 VALUES
 ('Brand Identity – Luxe Studio', 'Branding', 'Complete brand identity design including logo, color palette, and brand guidelines for a luxury design studio.', ARRAY['Adobe Illustrator', 'Photoshop'], 'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=600&h=400&fit=crop', 'https://www.behance.net'),
 ('Graphic Design Collection', 'Graphic Design', 'A curated set of graphic design work spanning print layouts, marketing collateral, and visual identity explorations.', ARRAY['Adobe Illustrator', 'Photoshop'], 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=600&h=400&fit=crop', 'https://www.behance.net'),
